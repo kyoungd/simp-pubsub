@@ -1,0 +1,34 @@
+[
+    {
+        "datatype": "VSA",
+        "symbol": "ISEE",
+        "timeframe": "15Min",
+        "vsa": 4,
+        "cs": 0,
+        "price": 21.7
+    },
+    {
+        "datatype": "VSA",
+        "symbol": "AFRM",
+        "timeframe": "15Min",
+        "vsa": 0,
+        "cs": 0,
+        "price": 13.51
+    },
+    {
+        "datatype": "VSA",
+        "symbol": "DWAC",
+        "timeframe": "15Min",
+        "vsa": 4,
+        "cs": 0,
+        "price": 21.38
+    },
+    {
+        "datatype": "VSA",
+        "symbol": "GRND",
+        "timeframe": "15Min",
+        "vsa": 4,
+        "cs": 0,
+        "price": 35.0
+    }
+]

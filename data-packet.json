@@ -1,0 +1,19 @@
+{
+    "techId": 1234,
+    "data": [
+        {
+            "symbol": "AAPL",
+            "pattern": "Head/Shoulders",
+            "datetime": "2022-12-01T012:40:00Z",
+            "price": 123.24,
+            "timeframe": "15Min",
+        },
+        {
+            "symbol": "MSFT",
+            "pattern": "Head/Shoulders",
+            "datetime": "2022-12-01T012:40:00Z",
+            "price": 323.24,
+            "timeframe": "15Min",
+        }
+    ]
+}

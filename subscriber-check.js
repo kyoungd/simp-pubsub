@@ -3,7 +3,7 @@ import socketIOClient from 'socket.io-client';
 import global from './constants.js';
 import moment from 'moment';
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
-import getJwt from './utilredis.js';
+import GetJwt from './utilGetJwt.js';
 
 dotenv.config()
 
@@ -21,7 +21,8 @@ const connectSocket = (jwt) => {
 
 (async () => {
 
-    const datajwt = await getJwt() ;
+    const datajwt = await GetJwt.run() ;
+    console.log(datajwt);
     const jwt = datajwt ? datajwt.jwt : process.env.TOKEN;
     console.log('Connecting to admin server...' + hostUrl);
     const socket = connectSocket(jwt);

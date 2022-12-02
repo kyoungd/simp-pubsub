@@ -36,6 +36,7 @@ const getPattern = (vsa, cs) => {
 (async () => {
 
     const datajwt = await GetJwt.run();
+    console.log(datajwt);
     const jwt = datajwt ? datajwt : process.env.TOKEN;
     console.log('Connecting to admin server...' + hostUrl);
     const socket = connectSocket(jwt);

@@ -2,7 +2,9 @@ import redis from 'redis';
 import socketIOClient from 'socket.io-client';
 import global from './constants.js';
 import moment from 'moment';
-import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+import * as dotenv from 'dotenv';
+import GetJwt from './utilGetJwt.js';
+
 dotenv.config()
 
 // const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY1MDgwMTE1LCJleHAiOjE2Njc2NzIxMTV9.PvvtvWs8UFdrdZAvb3ZPxtAbX9fu5Xmyo889pS9ln10';
@@ -11,9 +13,8 @@ dotenv.config()
 
 // get values from .env file
 const hostUrl = process.env.HOST_URL;
-const jwt = process.env.TOKEN;
 
-const connectSocket = () => {
+const connectSocket = (jwt) => {
     const socket = socketIOClient(hostUrl, {
         query: {
             token: jwt
@@ -34,8 +35,10 @@ const getPattern = (vsa, cs) => {
 
 (async () => {
 
+    const datajwt = await GetJwt.run();
+    const jwt = datajwt ? datajwt : process.env.TOKEN;
     console.log('Connecting to admin server...' + hostUrl);
-    const socket = connectSocket();
+    const socket = connectSocket(jwt);
     const username = 'user-' + Math.random().toString().replace('.', '');
     const room = global.EVENT_BAR_POST_TO_SERVER;
     socket.emit('joinRoom', { username, room });

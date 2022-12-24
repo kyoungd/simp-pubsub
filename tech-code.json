@@ -1,0 +1,32 @@
+[
+    {
+        "field" : "vsa",
+        "value": 1,
+        "code" : "clx-001",
+        "summary": "climax"
+    },
+    {
+        "field" : "vsa",
+        "value": 2,
+        "code" : "thr-001",
+        "summary": "thrust"
+    },
+    {
+        "field" : "cs",
+        "value": 4,
+        "code" : "ABC-001",
+        "summary": "ABCD"
+    },
+    {
+        "field" : "cs",
+        "value": 8,
+        "code" : "PBK-001",
+        "summary": "Pullback"
+    },
+    {
+        "field" : "cs",
+        "value": 16,
+        "code" : "MAC-001",
+        "summary": "MACD"
+    }
+]

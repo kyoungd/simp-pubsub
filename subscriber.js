@@ -2,8 +2,11 @@ import redis from 'redis';
 import socketIOClient from 'socket.io-client';
 import global from './constants.js';
 import moment from 'moment';
+import _ from 'lodash';
 import * as dotenv from 'dotenv';
 import GetJwt from './utilGetJwt.js';
+const url = process.env.URL_GET_TECH_CODE;
+import { dataFetch } from './dataFetch.js';
 
 dotenv.config()
 
@@ -23,6 +26,17 @@ const connectSocket = (jwt) => {
     return socket;
 }
 
+const getTech = (techs, bar) => {
+    const result = [];
+    for (const tech of techs) {
+        if ((bar[tech.field] & tech.value) === tech.value)
+            result.push(tech.code);
+    }
+    if (result.length >= 2) return result.join(',');
+    if (result.length == 1) return result[0];
+    return '';
+}
+
 const getPattern = (vsa, cs) => {
     let pattern = '';
     pattern += vsa === 1 ? ' thrust' : '';
@@ -33,8 +47,9 @@ const getPattern = (vsa, cs) => {
     return pattern;
 }
 
-(async () => {
-
+const run = async () => {
+    const url = process.env.URL_GET_TECH_CODE;
+    const techs = await dataFetch(url);
     const datajwt = await GetJwt.run();
     console.log(datajwt);
     const jwt = datajwt ? datajwt : process.env.TOKEN;
@@ -54,9 +69,9 @@ const getPattern = (vsa, cs) => {
         try {
             console.log(message);
             const content = JSON.parse(message);
-            const data = content.filter((x) => x && getPattern(x.vsa, x.cs).length > 0)
+            const data = content.filter((x) => x && getTech(techs, x).length > 0)
             for (const x of data) {
-                const row = { ...x, pattern: getPattern(x.vsa, x.cs) };
+                const row = { ...x, pattern: getTech(techs, x) };
                 console.log(moment().format('yyyy-mm-dd:hh:mm:ss'));
                 console.log('chatMessage: ' + JSON.stringify(row)); // 'message'
                 socket.emit('chatMessage', JSON.stringify(row));
@@ -67,4 +82,12 @@ const getPattern = (vsa, cs) => {
         }
     });
 
-})();
+}
+
+run().then(() => {
+    console.log('start successfully');
+}).catch((e) => {
+    console.log(e);
+});
+
+export { getTech }

@@ -8,6 +8,15 @@ function makeBearToken(token) {
   };
 }
 
+async function getOne(url, jwt) {
+  const result = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${jwt}`
+    }
+  });
+  return result.data;
+}
+
 async function dataFetch(url, token = null) {
   if (!token)
     return axios
@@ -35,4 +44,4 @@ async function dataPut(url, token, data) {
     .catch((err) => console.log(err));
 }
 
-export { dataFetch, dataPost, dataPut };
+export { dataFetch, dataPost, dataPut, getOne };

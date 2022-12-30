@@ -5,8 +5,7 @@ import moment from 'moment';
 import _ from 'lodash';
 import * as dotenv from 'dotenv';
 import GetJwt from './utilGetJwt.js';
-const url = process.env.URL_GET_TECH_CODE;
-import { dataFetch } from './dataFetch.js';
+import { getOne } from './dataFetch.js';
 
 dotenv.config()
 
@@ -47,11 +46,17 @@ const getPattern = (vsa, cs) => {
     return pattern;
 }
 
+const getSentiment = async (symbol, datajwt) => {
+    const url = `process.env.URL_GET_SENTIMENT?symbol=${pack.symbol}`;;
+    const sentiment = getOne(url, datajwt);
+}
+
 const run = async () => {
     const url = process.env.URL_GET_TECH_CODE;
-    const techs = await dataFetch(url);
     const datajwt = await GetJwt.run();
-    console.log(datajwt);
+    const global = await getOne(url, datajwt);
+    const techs = global.data[0].attributes.techCodes;
+    console.log(techs);
     const jwt = datajwt ? datajwt : process.env.TOKEN;
     console.log('Connecting to admin server...' + hostUrl);
     const socket = connectSocket(jwt);
@@ -70,12 +75,19 @@ const run = async () => {
             console.log(message);
             const content = JSON.parse(message);
             const data = content.filter((x) => x && getTech(techs, x).length > 0)
-            for (const x of data) {
-                const row = { ...x, pattern: getTech(techs, x) };
+            data.map(async (pack) => {
+                const sentiment = await getSentiment(pack.symbol, datajwt);
+                const row = { ...pack, pattern: getTech(techs, pack), codes: getTech(techs, pack), sentiment: sentiment.data.sentiment };
                 console.log(moment().format('yyyy-mm-dd:hh:mm:ss'));
                 console.log('chatMessage: ' + JSON.stringify(row)); // 'message'
                 socket.emit('chatMessage', JSON.stringify(row));
-            }
+            });
+            // for (const x of data) {
+            //     const row = { ...x, pattern: getTech(techs, x), codes: getTech(techs, x) };
+            //     console.log(moment().format('yyyy-mm-dd:hh:mm:ss'));
+            //     console.log('chatMessage: ' + JSON.stringify(row)); // 'message'
+            //     socket.emit('chatMessage', JSON.stringify(row));
+            // }
         }
         catch (e) {
             console.log(e);

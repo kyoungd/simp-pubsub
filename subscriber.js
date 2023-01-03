@@ -54,8 +54,8 @@ const getSentiment = async (symbol, datajwt) => {
 const run = async () => {
     const url = process.env.URL_GET_TECH_CODE;
     const datajwt = await GetJwt.run();
-    const global = await getOne(url, datajwt);
-    const techs = global.data[0].attributes.techCodes;
+    const globalData = await getOne(url, datajwt);
+    const techs = globalData.data[0].attributes.techCodes;
     console.log(techs);
     const jwt = datajwt ? datajwt : process.env.TOKEN;
     console.log('Connecting to admin server...' + hostUrl);

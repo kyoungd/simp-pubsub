@@ -47,7 +47,7 @@ const getPattern = (vsa, cs) => {
 }
 
 const getSentiment = async (symbol, datajwt) => {
-    const url = `process.env.URL_GET_SENTIMENT?symbol=${pack.symbol}`;;
+    const url = `process.env.URL_GET_SENTIMENT?symbol=${symbol}`;
     const sentiment = getOne(url, datajwt);
 }
 
